@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #template {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <textarea id="template"></textarea>
+    <button id="btn">转换</button>
+    <script type="module">
+        import { parser } from "./dist/src/html2ast.js"
+        import { generate } from "./dist/src/ast2html.js"
+        let html = document.querySelector("#template")
+        html.value = `<div class="out">\n    <span id="inner">\n        <a href="/name">点击</a>\n    </span>\n    <span id="inner">\n        <a href="/name">点击</a>\n    </span>\n</div>\n this is a HTML`
+
+        let b = document.querySelector("#btn")
+        b.addEventListener("click",function() {
+            // console.log(html.value)
+            let ast = parser(html.value)
+            console.log(ast)
+            generate(ast)
+            console.log(ast.output)
+        })
+    </script>
+</body>
+</html>
