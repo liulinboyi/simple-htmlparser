@@ -7,7 +7,7 @@ import {
     parser
 } from "./src/html2ast"
 
-let file = fs.readFileSync(path.resolve(__dirname, "./demo5.html"), {
+let file = fs.readFileSync(path.resolve(__dirname, "./example/demo6.html"), {
     encode: "utf-8"
 })
 file = file.toString()

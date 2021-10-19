@@ -62,6 +62,8 @@ export function generate(ast: any) {
                 stack[index].output = `<${stack[index].tag}${attrs.length > 0 ? " " : ''}${attrs.join(" ")}></${stack[index].tag}>`
             } else if (stack[index].type === "text") {
                 stack[index].output = stack[index].content
+            } else if (stack[index].type === "comment") {
+                stack[index].output = `<!--${stack[index].content}-->`
             }
         }
         index++

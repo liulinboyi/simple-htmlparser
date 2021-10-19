@@ -3,6 +3,16 @@ function lexer(item, index, file) {
     function isEnd(index) {
         return file.length <= index;
     }
+    function isCommentEnd(hanlder, index) {
+        var count = index;
+        var target = "-->";
+        var sour = "";
+        while (count < index + 3) {
+            sour += hanlder.charAt(count);
+            count++;
+        }
+        return target === sour;
+    }
     if (item === "<") { // <
         index++;
         if (file.charAt(index) === "/") { // </
@@ -25,6 +35,46 @@ function lexer(item, index, file) {
                 tag: tag,
                 index: index,
                 closeTag: true
+            };
+        }
+        else if (file.charAt(index) === "!") {
+            index++;
+            var cur = file.charAt(index);
+            var count = 2;
+            while (count) { // <!--
+                if (cur !== "-") {
+                    console.assert("fail");
+                }
+                index++;
+                cur = file.charAt(index);
+                count--;
+            }
+            // -->结束
+            var content = "";
+            cur = file.charAt(index);
+            var isCEnd = false;
+            while (!isEnd(index)) {
+                isCEnd = isCommentEnd(file, index);
+                if (isCEnd) {
+                    break;
+                }
+                content += cur;
+                index++;
+                cur = file.charAt(index);
+            }
+            if (isCEnd) { // -->
+                index += 3;
+            }
+            if (isEnd(index) && content === '') {
+                return {
+                    type: "EOF",
+                    index: index
+                };
+            }
+            return {
+                type: "comment",
+                content: content,
+                index: index
             };
         }
         else { // <

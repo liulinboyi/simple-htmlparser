@@ -69,6 +69,9 @@ export function generate(ast) {
             else if (stack[index].type === "text") {
                 stack[index].output = stack[index].content;
             }
+            else if (stack[index].type === "comment") {
+                stack[index].output = "<!--" + stack[index].content + "-->";
+            }
         }
         index++;
     }

@@ -4,6 +4,17 @@ function lexer(item: any, index: any, file: any) {
         return file.length <= index
     }
 
+    function isCommentEnd(hanlder: any, index: number) {
+        let count = index;
+        let target = "-->"
+        let sour = ""
+        while (count < index + 3) {
+            sour += hanlder.charAt(count)
+            count++
+        }
+        return target === sour
+    }
+
     if (item === "<") { // <
         index++
         if (file.charAt(index) === "/") { // </
@@ -29,6 +40,48 @@ function lexer(item: any, index: any, file: any) {
                 index,
                 closeTag: true
             }
+        } else if (file.charAt(index) === "!") {
+            index++
+            let cur = file.charAt(index)
+            let count = 2;
+            while (count) { // <!--
+                if (cur !== "-") {
+                    console.assert("fail")
+                }
+                index++
+                cur = file.charAt(index)
+                count--
+            }
+            // -->结束
+            let content = ""
+            cur = file.charAt(index)
+            let isCEnd = false
+
+            while (!isEnd(index)) {
+                isCEnd = isCommentEnd(file, index)
+                if (isCEnd) {
+                    break
+                }
+                content += cur
+                index++
+                cur = file.charAt(index)
+            }
+            if (isCEnd) { // -->
+                index += 3
+            }
+
+            if (isEnd(index) && content === '') {
+                return {
+                    type: "EOF",
+                    index
+                }
+            }
+            return {
+                type: "comment",
+                content,
+                index
+            }
+
         } else { // <
             let tag = ""
             let cur = file.charAt(index)
