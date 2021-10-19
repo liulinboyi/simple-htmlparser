@@ -20,7 +20,7 @@
         import { parser } from "./dist/src/html2ast.js"
         import { generate } from "./dist/src/ast2html.js"
         let html = document.querySelector("#template")
-        html.value = `<div class="out">\n    <span id="inner">\n        <a href="/name">点击</a>\n    </span>\n    <span id="inner">\n        <a href="/name">点击</a>\n    </span>\n</div>\n this is a HTML`
+        html.value = `<\!-- \n\nstart\n\n -->\n<div class="out">\n    <\!-- hello -->\n    <span id="inner">\n        <a href="/name">点击</a>\n    </span>\n    <span id="inner">\n        <a href="/name">\n         点击 \n        <\!-- 点击 --> \n        </a>\n    </span>\n</div>\n<\!-- end -->\n this is a HTML`
 
         let b = document.querySelector("#btn")
         b.addEventListener("click",function() {
